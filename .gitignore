@@ -7,3 +7,5 @@ src/htmldocs/
 leveldbtool
 *.html
 *.css
+build
+
