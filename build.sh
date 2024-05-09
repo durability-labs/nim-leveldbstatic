@@ -10,13 +10,18 @@ cmake -S "${root}/sources" -B "${root}/build"
 
 # prelude: not needed?
 
+rm "${root}/leveldb.nim"
 echo >> "${root}/leveldb.nim"
 
 # assemble files to be compiled:
 extensions="c cc cpp"
 for ext in ${extensions}; do
   for file in `find "${root}/sources" -type f -name "*.${ext}"`; do
-    compile="${compile} --compile=${file}"
+    if [[ $file == *"_test"* ]]; then
+      echo "Skip test file: ${file}"
+    else
+      compile="${compile} --compile=${file}"
+    fi
   done
 done
 
@@ -26,6 +31,10 @@ toast \
   --pnim \
   --preprocess \
   --noHeader \
-  --includeDirs="${root}/sources/include/leveldb" \
+  --includeDirs="${root}/sources" \
+  --includeDirs="${root}/sources/helpers" \
+  --includeDirs="${root}/sources/helpers/memenv" \
+  --includeDirs="${root}/sources/port" \
+  --includeDirs="${root}/sources/include" \
   --includeDirs="${root}/build/include" \
   "${root}/sources/include/leveldb/c.h" >> "${root}/leveldb.nim"
