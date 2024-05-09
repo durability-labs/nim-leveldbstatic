@@ -16,21 +16,18 @@ rm -Rf "${root}/sources/third_party"
 rm -Rf "${root}/sources/benchmarks"
 rm "${root}/sources/util/testutil.cc"
 
-# prelude: not needed?
-
-rm "${root}/leveldb.nim"
+# Prelude:
+cat "${root}/prelude.nim" > "${root}/leveldb.nim"
 echo >> "${root}/leveldb.nim"
 
 # assemble files to be compiled:
 extensions="c cc cpp"
 for ext in ${extensions}; do
-  for file in `find "${root}/sources" -type f -name "*.${ext}"`; do
-    if [[ $file == *"_test"* ]]; then
-      echo "Skip test file: ${file}"
-    else
-      echo "Include file: ${file}"
-      compile="${compile} --compile=${file}"
-    fi
+  for file in `find "${root}/sources" -type f -name "*.${ext}" \
+          | grep -v "_test" \
+          | grep -v "env_windows.cc" \
+          | grep -v "env_posix.cc"`; do
+    compile="${compile} --compile=${file}"
   done
 done
 
@@ -46,5 +43,6 @@ toast \
   --includeDirs="${root}/sources/port" \
   --includeDirs="${root}/sources/include" \
   --includeDirs="${root}/build/include" \
+  --includeDirs="${root}/build/include/port" \
   "${root}/sources/include/leveldb/c.h" >> "${root}/leveldb.nim"
-  
+
