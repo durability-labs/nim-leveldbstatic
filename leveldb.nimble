@@ -4,9 +4,10 @@ version       = "0.4.1"
 author        = "Michał Zieliński"
 description   = "LevelDB wrapper for Nim"
 license       = "MIT"
-srcDir        = "src"
-installExt    = @["nim"]
 bin           = @["leveldbtool"]
+installExt    = @["nim", "cc", "h", "c", "cpp"]
+skipDirs      = @["tests"]
+
 
 # Dependencies
 

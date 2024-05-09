@@ -1,14 +1,20 @@
+import os
+
+const root = currentSourcePath.parentDir.parentDir
+const envWindows = root/"vendor"/"util"/"env_windows.cc"
+const envPosix = root/"vendor"/"util"/"env_posix.cc"
+
 when defined(windows):
-  {.compile: "./src/vendor/util/env_windows.cc".}
+  {.compile: envWindows.}
   {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
 when defined(posix):
-  {.compile: "./src/vendor/util/env_posix.cc".}
+  {.compile: envPosix.}
   {.passc: "-DLEVELDB_PLATFORM_WINDOWS".}
 
-# Generated @ 2024-05-09T14:57:19+02:00
+# Generated @ 2024-05-09T15:32:29+02:00
 # Command line:
-#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./src/vendor/helpers/memenv/memenv.cc --compile=./src/vendor/table/table.cc --compile=./src/vendor/table/iterator.cc --compile=./src/vendor/table/merger.cc --compile=./src/vendor/table/block.cc --compile=./src/vendor/table/table_builder.cc --compile=./src/vendor/table/format.cc --compile=./src/vendor/table/two_level_iterator.cc --compile=./src/vendor/table/filter_block.cc --compile=./src/vendor/table/block_builder.cc --compile=./src/vendor/db/write_batch.cc --compile=./src/vendor/db/version_edit.cc --compile=./src/vendor/db/dbformat.cc --compile=./src/vendor/db/builder.cc --compile=./src/vendor/db/repair.cc --compile=./src/vendor/db/db_impl.cc --compile=./src/vendor/db/dumpfile.cc --compile=./src/vendor/db/filename.cc --compile=./src/vendor/db/log_reader.cc --compile=./src/vendor/db/memtable.cc --compile=./src/vendor/db/table_cache.cc --compile=./src/vendor/db/c.cc --compile=./src/vendor/db/log_writer.cc --compile=./src/vendor/db/version_set.cc --compile=./src/vendor/db/db_iter.cc --compile=./src/vendor/util/hash.cc --compile=./src/vendor/util/options.cc --compile=./src/vendor/util/comparator.cc --compile=./src/vendor/util/coding.cc --compile=./src/vendor/util/histogram.cc --compile=./src/vendor/util/logging.cc --compile=./src/vendor/util/cache.cc --compile=./src/vendor/util/env.cc --compile=./src/vendor/util/filter_policy.cc --compile=./src/vendor/util/arena.cc --compile=./src/vendor/util/bloom.cc --compile=./src/vendor/util/crc32c.cc --compile=./src/vendor/util/status.cc --pnim --preprocess --noHeader --includeDirs=./src/vendor --includeDirs=./src/vendor/helpers --includeDirs=./src/vendor/helpers/memenv --includeDirs=./src/vendor/port --includeDirs=./src/vendor/include --includeDirs=./build/include ./src/vendor/include/leveldb/c.h
+#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/helpers/memenv/memenv.cc --compile=./vendor/table/table.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/block.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/format.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/repair.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/c.cc --compile=./vendor/db/log_writer.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/options.cc --compile=./vendor/util/comparator.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/status.cc --pnim --preprocess --noHeader --includeDirs=./vendor --includeDirs=./vendor/helpers --includeDirs=./vendor/helpers/memenv --includeDirs=./vendor/port --includeDirs=./vendor/include --includeDirs=./build/include ./vendor/include/leveldb/c.h
 
 {.push hint[ConvFromXtoItselfNotNeeded]: off.}
 import macros
@@ -56,50 +62,50 @@ macro defineEnum(typ: untyped): untyped =
 
 
 {.experimental: "codeReordering".}
-{.passC: "-I./src/vendor".}
-{.passC: "-I./src/vendor/helpers".}
-{.passC: "-I./src/vendor/helpers/memenv".}
-{.passC: "-I./src/vendor/port".}
-{.passC: "-I./src/vendor/include".}
+{.passC: "-I./vendor".}
+{.passC: "-I./vendor/helpers".}
+{.passC: "-I./vendor/helpers/memenv".}
+{.passC: "-I./vendor/port".}
+{.passC: "-I./vendor/include".}
 {.passC: "-I./build/include".}
-{.compile: "./src/vendor/helpers/memenv/memenv.cc".}
-{.compile: "./src/vendor/table/table.cc".}
-{.compile: "./src/vendor/table/iterator.cc".}
-{.compile: "./src/vendor/table/merger.cc".}
-{.compile: "./src/vendor/table/block.cc".}
-{.compile: "./src/vendor/table/table_builder.cc".}
-{.compile: "./src/vendor/table/format.cc".}
-{.compile: "./src/vendor/table/two_level_iterator.cc".}
-{.compile: "./src/vendor/table/filter_block.cc".}
-{.compile: "./src/vendor/table/block_builder.cc".}
-{.compile: "./src/vendor/db/write_batch.cc".}
-{.compile: "./src/vendor/db/version_edit.cc".}
-{.compile: "./src/vendor/db/dbformat.cc".}
-{.compile: "./src/vendor/db/builder.cc".}
-{.compile: "./src/vendor/db/repair.cc".}
-{.compile: "./src/vendor/db/db_impl.cc".}
-{.compile: "./src/vendor/db/dumpfile.cc".}
-{.compile: "./src/vendor/db/filename.cc".}
-{.compile: "./src/vendor/db/log_reader.cc".}
-{.compile: "./src/vendor/db/memtable.cc".}
-{.compile: "./src/vendor/db/table_cache.cc".}
-{.compile: "./src/vendor/db/c.cc".}
-{.compile: "./src/vendor/db/log_writer.cc".}
-{.compile: "./src/vendor/db/version_set.cc".}
-{.compile: "./src/vendor/db/db_iter.cc".}
-{.compile: "./src/vendor/util/hash.cc".}
-{.compile: "./src/vendor/util/options.cc".}
-{.compile: "./src/vendor/util/comparator.cc".}
-{.compile: "./src/vendor/util/coding.cc".}
-{.compile: "./src/vendor/util/histogram.cc".}
-{.compile: "./src/vendor/util/logging.cc".}
-{.compile: "./src/vendor/util/cache.cc".}
-{.compile: "./src/vendor/util/env.cc".}
-{.compile: "./src/vendor/util/filter_policy.cc".}
-{.compile: "./src/vendor/util/arena.cc".}
-{.compile: "./src/vendor/util/bloom.cc".}
-{.compile: "./src/vendor/util/crc32c.cc".}
-{.compile: "./src/vendor/util/status.cc".}
+{.compile: "./vendor/helpers/memenv/memenv.cc".}
+{.compile: "./vendor/table/table.cc".}
+{.compile: "./vendor/table/iterator.cc".}
+{.compile: "./vendor/table/merger.cc".}
+{.compile: "./vendor/table/block.cc".}
+{.compile: "./vendor/table/table_builder.cc".}
+{.compile: "./vendor/table/format.cc".}
+{.compile: "./vendor/table/two_level_iterator.cc".}
+{.compile: "./vendor/table/filter_block.cc".}
+{.compile: "./vendor/table/block_builder.cc".}
+{.compile: "./vendor/db/write_batch.cc".}
+{.compile: "./vendor/db/version_edit.cc".}
+{.compile: "./vendor/db/dbformat.cc".}
+{.compile: "./vendor/db/builder.cc".}
+{.compile: "./vendor/db/repair.cc".}
+{.compile: "./vendor/db/db_impl.cc".}
+{.compile: "./vendor/db/dumpfile.cc".}
+{.compile: "./vendor/db/filename.cc".}
+{.compile: "./vendor/db/log_reader.cc".}
+{.compile: "./vendor/db/memtable.cc".}
+{.compile: "./vendor/db/table_cache.cc".}
+{.compile: "./vendor/db/c.cc".}
+{.compile: "./vendor/db/log_writer.cc".}
+{.compile: "./vendor/db/version_set.cc".}
+{.compile: "./vendor/db/db_iter.cc".}
+{.compile: "./vendor/util/hash.cc".}
+{.compile: "./vendor/util/options.cc".}
+{.compile: "./vendor/util/comparator.cc".}
+{.compile: "./vendor/util/coding.cc".}
+{.compile: "./vendor/util/histogram.cc".}
+{.compile: "./vendor/util/logging.cc".}
+{.compile: "./vendor/util/cache.cc".}
+{.compile: "./vendor/util/env.cc".}
+{.compile: "./vendor/util/filter_policy.cc".}
+{.compile: "./vendor/util/arena.cc".}
+{.compile: "./vendor/util/bloom.cc".}
+{.compile: "./vendor/util/crc32c.cc".}
+{.compile: "./vendor/util/status.cc".}
 defineEnum(Enum_ch1)
 const
   leveldb_no_compression* = (0).cint

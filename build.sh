@@ -1,9 +1,9 @@
 #!/bin/bash
 root=$(dirname "$0")
 
-sourceDir="${root}/src/vendor"
+sourceDir="${root}/vendor"
 buildDir="${root}/build"
-output="${root}/src/leveldb/raw.nim"
+output="${root}/leveldb/raw.nim"
 
 # install nimterop, if not already installed
 if ! [ -x "$(command -v toast)" ]; then
