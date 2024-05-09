@@ -15,18 +15,17 @@ echo >> "${root}/leveldb.nim"
 # assemble files to be compiled:
 extensions="c cc cpp"
 for ext in ${extensions}; do
-  echo ${ext}
   for file in `find "${root}/sources" -type f -name "*.${ext}"`; do
-    echo ${file}
+    compile="${compile} --compile=${file}"
   done
 done
 
 # generate nim wrapper with nimterop
-#toast \
-#  --compile="${root}/sources/randombytes.c" \
-#  --compile="${root}/sources/hazmat.c" \
-#  --pnim \
-#  --noHeader \
-#  "${root}/sources/randombytes.h" \
-#  "${root}/sources/hazmat.h" > "${root}/sss/cwrapper.nim"
-~                                                                                ~                                                                                ~                                        
+toast \
+  $compile \
+  --pnim \
+  --preprocess \
+  --noHeader \
+  --includeDirs="${root}/sources/include/leveldb" \
+  --includeDirs="${root}/build/include" \
+  "${root}/sources/include/leveldb/c.h" >> "${root}/leveldb.nim"
