@@ -6,7 +6,15 @@ if ! [ -x "$(command -v toast)" ]; then
   nimble install -y nimterop@0.6.13
 fi
 
+git submodule deinit -f "${root}"
+git submodule update --init --recursive --checkout "${root}"
+
 cmake -S "${root}/sources" -B "${root}/build"
+
+# Remove testing, benchmarking, third-party libraries.
+rm -Rf "${root}/sources/third_party"
+rm -Rf "${root}/sources/benchmarks"
+rm "${root}/sources/util/testutil.cc"
 
 # prelude: not needed?
 
@@ -20,6 +28,7 @@ for ext in ${extensions}; do
     if [[ $file == *"_test"* ]]; then
       echo "Skip test file: ${file}"
     else
+      echo "Include file: ${file}"
       compile="${compile} --compile=${file}"
     fi
   done
@@ -38,3 +47,4 @@ toast \
   --includeDirs="${root}/sources/include" \
   --includeDirs="${root}/build/include" \
   "${root}/sources/include/leveldb/c.h" >> "${root}/leveldb.nim"
+  
