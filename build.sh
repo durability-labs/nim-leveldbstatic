@@ -1,6 +1,8 @@
 #!/bin/bash
 root=$(dirname "$0")
 
+output="${root}/src/leveldb/raw.nim"
+
 # install nimterop, if not already installed
 if ! [ -x "$(command -v toast)" ]; then
   nimble install -y nimterop@0.6.13
@@ -17,8 +19,8 @@ rm -Rf "${root}/sources/benchmarks"
 rm "${root}/sources/util/testutil.cc"
 
 # Prelude:
-cat "${root}/prelude.nim" > "${root}/leveldb.nim"
-echo >> "${root}/leveldb.nim"
+cat "${root}/prelude.nim" > "${output}"
+echo >> "${output}"
 
 # assemble files to be compiled:
 extensions="c cc cpp"
@@ -45,5 +47,5 @@ toast \
   --includeDirs="${root}/sources/include" \
   --includeDirs="${root}/build/include" \
   --includeDirs="${root}/build/include/port" \
-  "${root}/sources/include/leveldb/c.h" >> "${root}/leveldb.nim"
+  "${root}/sources/include/leveldb/c.h" >> "${output}"
 
