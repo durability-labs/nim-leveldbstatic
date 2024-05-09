@@ -1,6 +1,8 @@
 #!/bin/bash
 root=$(dirname "$0")
 
+sourceDir="${root}/src/vendor"
+buildDir="${root}/build"
 output="${root}/src/leveldb/raw.nim"
 
 # install nimterop, if not already installed
@@ -11,12 +13,12 @@ fi
 git submodule deinit -f "${root}"
 git submodule update --init --recursive --checkout "${root}"
 
-cmake -S "${root}/sources" -B "${root}/build"
+cmake -S "${sourceDir}" -B "${buildDir}"
 
 # Remove testing, benchmarking, third-party libraries.
-rm -Rf "${root}/sources/third_party"
-rm -Rf "${root}/sources/benchmarks"
-rm "${root}/sources/util/testutil.cc"
+rm -Rf "${sourceDir}/third_party"
+rm -Rf "${sourceDir}/benchmarks"
+rm "${sourceDir}/util/testutil.cc"
 
 # Prelude:
 cat "${root}/prelude.nim" > "${output}"
@@ -25,7 +27,7 @@ echo >> "${output}"
 # assemble files to be compiled:
 extensions="c cc cpp"
 for ext in ${extensions}; do
-  for file in `find "${root}/sources" -type f -name "*.${ext}" \
+  for file in `find "${sourceDir}" -type f -name "*.${ext}" \
           | grep -v "_test" \
           | grep -v "env_windows.cc" \
           | grep -v "env_posix.cc" \
@@ -40,12 +42,14 @@ toast \
   --pnim \
   --preprocess \
   --noHeader \
-  --includeDirs="${root}/sources" \
-  --includeDirs="${root}/sources/helpers" \
-  --includeDirs="${root}/sources/helpers/memenv" \
-  --includeDirs="${root}/sources/port" \
-  --includeDirs="${root}/sources/include" \
-  --includeDirs="${root}/build/include" \
-  --includeDirs="${root}/build/include/port" \
-  "${root}/sources/include/leveldb/c.h" >> "${output}"
+  --includeDirs="${sourceDir}" \
+  --includeDirs="${sourceDir}/helpers" \
+  --includeDirs="${sourceDir}/helpers/memenv" \
+  --includeDirs="${sourceDir}/port" \
+  --includeDirs="${sourceDir}/include" \
+  --includeDirs="${buildDir}/include" \
+  "${sourceDir}/include/leveldb/c.h" >> "${output}"
+
+#  --includeDirs="${buildDir}/include/port" \
+
 

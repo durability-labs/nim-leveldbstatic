@@ -1,14 +1,14 @@
 when defined(windows):
-  {.compile: "./sources/util/env_windows.cc".}
+  {.compile: "./src/vendor/util/env_windows.cc".}
   {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
 when defined(posix):
-  {.compile: "./sources/util/env_posix.cc".}
+  {.compile: "./src/vendor/util/env_posix.cc".}
   {.passc: "-DLEVELDB_PLATFORM_WINDOWS".}
 
-# Generated @ 2024-05-09T14:13:25+02:00
+# Generated @ 2024-05-09T14:57:19+02:00
 # Command line:
-#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./sources/helpers/memenv/memenv.cc --compile=./sources/table/table.cc --compile=./sources/table/iterator.cc --compile=./sources/table/merger.cc --compile=./sources/table/block.cc --compile=./sources/table/table_builder.cc --compile=./sources/table/format.cc --compile=./sources/table/two_level_iterator.cc --compile=./sources/table/filter_block.cc --compile=./sources/table/block_builder.cc --compile=./sources/db/write_batch.cc --compile=./sources/db/version_edit.cc --compile=./sources/db/dbformat.cc --compile=./sources/db/builder.cc --compile=./sources/db/repair.cc --compile=./sources/db/db_impl.cc --compile=./sources/db/dumpfile.cc --compile=./sources/db/filename.cc --compile=./sources/db/log_reader.cc --compile=./sources/db/memtable.cc --compile=./sources/db/table_cache.cc --compile=./sources/db/c.cc --compile=./sources/db/log_writer.cc --compile=./sources/db/version_set.cc --compile=./sources/db/db_iter.cc --compile=./sources/util/hash.cc --compile=./sources/util/options.cc --compile=./sources/util/comparator.cc --compile=./sources/util/coding.cc --compile=./sources/util/histogram.cc --compile=./sources/util/logging.cc --compile=./sources/util/cache.cc --compile=./sources/util/env.cc --compile=./sources/util/filter_policy.cc --compile=./sources/util/arena.cc --compile=./sources/util/bloom.cc --compile=./sources/util/crc32c.cc --compile=./sources/util/status.cc --pnim --preprocess --noHeader --includeDirs=./sources --includeDirs=./sources/helpers --includeDirs=./sources/helpers/memenv --includeDirs=./sources/port --includeDirs=./sources/include --includeDirs=./build/include --includeDirs=./build/include/port ./sources/include/leveldb/c.h
+#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./src/vendor/helpers/memenv/memenv.cc --compile=./src/vendor/table/table.cc --compile=./src/vendor/table/iterator.cc --compile=./src/vendor/table/merger.cc --compile=./src/vendor/table/block.cc --compile=./src/vendor/table/table_builder.cc --compile=./src/vendor/table/format.cc --compile=./src/vendor/table/two_level_iterator.cc --compile=./src/vendor/table/filter_block.cc --compile=./src/vendor/table/block_builder.cc --compile=./src/vendor/db/write_batch.cc --compile=./src/vendor/db/version_edit.cc --compile=./src/vendor/db/dbformat.cc --compile=./src/vendor/db/builder.cc --compile=./src/vendor/db/repair.cc --compile=./src/vendor/db/db_impl.cc --compile=./src/vendor/db/dumpfile.cc --compile=./src/vendor/db/filename.cc --compile=./src/vendor/db/log_reader.cc --compile=./src/vendor/db/memtable.cc --compile=./src/vendor/db/table_cache.cc --compile=./src/vendor/db/c.cc --compile=./src/vendor/db/log_writer.cc --compile=./src/vendor/db/version_set.cc --compile=./src/vendor/db/db_iter.cc --compile=./src/vendor/util/hash.cc --compile=./src/vendor/util/options.cc --compile=./src/vendor/util/comparator.cc --compile=./src/vendor/util/coding.cc --compile=./src/vendor/util/histogram.cc --compile=./src/vendor/util/logging.cc --compile=./src/vendor/util/cache.cc --compile=./src/vendor/util/env.cc --compile=./src/vendor/util/filter_policy.cc --compile=./src/vendor/util/arena.cc --compile=./src/vendor/util/bloom.cc --compile=./src/vendor/util/crc32c.cc --compile=./src/vendor/util/status.cc --pnim --preprocess --noHeader --includeDirs=./src/vendor --includeDirs=./src/vendor/helpers --includeDirs=./src/vendor/helpers/memenv --includeDirs=./src/vendor/port --includeDirs=./src/vendor/include --includeDirs=./build/include ./src/vendor/include/leveldb/c.h
 
 {.push hint[ConvFromXtoItselfNotNeeded]: off.}
 import macros
@@ -56,51 +56,50 @@ macro defineEnum(typ: untyped): untyped =
 
 
 {.experimental: "codeReordering".}
-{.passC: "-I./sources".}
-{.passC: "-I./sources/helpers".}
-{.passC: "-I./sources/helpers/memenv".}
-{.passC: "-I./sources/port".}
-{.passC: "-I./sources/include".}
+{.passC: "-I./src/vendor".}
+{.passC: "-I./src/vendor/helpers".}
+{.passC: "-I./src/vendor/helpers/memenv".}
+{.passC: "-I./src/vendor/port".}
+{.passC: "-I./src/vendor/include".}
 {.passC: "-I./build/include".}
-{.passC: "-I./build/include/port".}
-{.compile: "./sources/helpers/memenv/memenv.cc".}
-{.compile: "./sources/table/table.cc".}
-{.compile: "./sources/table/iterator.cc".}
-{.compile: "./sources/table/merger.cc".}
-{.compile: "./sources/table/block.cc".}
-{.compile: "./sources/table/table_builder.cc".}
-{.compile: "./sources/table/format.cc".}
-{.compile: "./sources/table/two_level_iterator.cc".}
-{.compile: "./sources/table/filter_block.cc".}
-{.compile: "./sources/table/block_builder.cc".}
-{.compile: "./sources/db/write_batch.cc".}
-{.compile: "./sources/db/version_edit.cc".}
-{.compile: "./sources/db/dbformat.cc".}
-{.compile: "./sources/db/builder.cc".}
-{.compile: "./sources/db/repair.cc".}
-{.compile: "./sources/db/db_impl.cc".}
-{.compile: "./sources/db/dumpfile.cc".}
-{.compile: "./sources/db/filename.cc".}
-{.compile: "./sources/db/log_reader.cc".}
-{.compile: "./sources/db/memtable.cc".}
-{.compile: "./sources/db/table_cache.cc".}
-{.compile: "./sources/db/c.cc".}
-{.compile: "./sources/db/log_writer.cc".}
-{.compile: "./sources/db/version_set.cc".}
-{.compile: "./sources/db/db_iter.cc".}
-{.compile: "./sources/util/hash.cc".}
-{.compile: "./sources/util/options.cc".}
-{.compile: "./sources/util/comparator.cc".}
-{.compile: "./sources/util/coding.cc".}
-{.compile: "./sources/util/histogram.cc".}
-{.compile: "./sources/util/logging.cc".}
-{.compile: "./sources/util/cache.cc".}
-{.compile: "./sources/util/env.cc".}
-{.compile: "./sources/util/filter_policy.cc".}
-{.compile: "./sources/util/arena.cc".}
-{.compile: "./sources/util/bloom.cc".}
-{.compile: "./sources/util/crc32c.cc".}
-{.compile: "./sources/util/status.cc".}
+{.compile: "./src/vendor/helpers/memenv/memenv.cc".}
+{.compile: "./src/vendor/table/table.cc".}
+{.compile: "./src/vendor/table/iterator.cc".}
+{.compile: "./src/vendor/table/merger.cc".}
+{.compile: "./src/vendor/table/block.cc".}
+{.compile: "./src/vendor/table/table_builder.cc".}
+{.compile: "./src/vendor/table/format.cc".}
+{.compile: "./src/vendor/table/two_level_iterator.cc".}
+{.compile: "./src/vendor/table/filter_block.cc".}
+{.compile: "./src/vendor/table/block_builder.cc".}
+{.compile: "./src/vendor/db/write_batch.cc".}
+{.compile: "./src/vendor/db/version_edit.cc".}
+{.compile: "./src/vendor/db/dbformat.cc".}
+{.compile: "./src/vendor/db/builder.cc".}
+{.compile: "./src/vendor/db/repair.cc".}
+{.compile: "./src/vendor/db/db_impl.cc".}
+{.compile: "./src/vendor/db/dumpfile.cc".}
+{.compile: "./src/vendor/db/filename.cc".}
+{.compile: "./src/vendor/db/log_reader.cc".}
+{.compile: "./src/vendor/db/memtable.cc".}
+{.compile: "./src/vendor/db/table_cache.cc".}
+{.compile: "./src/vendor/db/c.cc".}
+{.compile: "./src/vendor/db/log_writer.cc".}
+{.compile: "./src/vendor/db/version_set.cc".}
+{.compile: "./src/vendor/db/db_iter.cc".}
+{.compile: "./src/vendor/util/hash.cc".}
+{.compile: "./src/vendor/util/options.cc".}
+{.compile: "./src/vendor/util/comparator.cc".}
+{.compile: "./src/vendor/util/coding.cc".}
+{.compile: "./src/vendor/util/histogram.cc".}
+{.compile: "./src/vendor/util/logging.cc".}
+{.compile: "./src/vendor/util/cache.cc".}
+{.compile: "./src/vendor/util/env.cc".}
+{.compile: "./src/vendor/util/filter_policy.cc".}
+{.compile: "./src/vendor/util/arena.cc".}
+{.compile: "./src/vendor/util/bloom.cc".}
+{.compile: "./src/vendor/util/crc32c.cc".}
+{.compile: "./src/vendor/util/status.cc".}
 defineEnum(Enum_ch1)
 const
   leveldb_no_compression* = (0).cint
