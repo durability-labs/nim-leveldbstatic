@@ -26,7 +26,8 @@ for ext in ${extensions}; do
   for file in `find "${root}/sources" -type f -name "*.${ext}" \
           | grep -v "_test" \
           | grep -v "env_windows.cc" \
-          | grep -v "env_posix.cc"`; do
+          | grep -v "env_posix.cc" \
+          | grep -v "leveldbutil.cc"`; do
     compile="${compile} --compile=${file}"
   done
 done
