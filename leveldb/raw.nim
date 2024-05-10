@@ -12,9 +12,17 @@ when defined(posix):
   {.compile: envPosix.}
   {.passc: "-DLEVELDB_PLATFORM_WINDOWS".}
 
-# Generated @ 2024-05-09T15:32:29+02:00
+{.passC: "-I" & root/"vendor".}
+{.passC: "-I" & root/"vendor"/"helpers".}
+{.passC: "-I" & root/"vendor"/"helpers"/"memenv".}
+{.passC: "-I" & root/"vendor"/"port".}
+{.passC: "-I" & root/"vendor"/"include".}
+{.passC: "-I" & root/"build"/"include".}
+
+
+# Generated @ 2024-05-10T13:57:11+02:00
 # Command line:
-#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/helpers/memenv/memenv.cc --compile=./vendor/table/table.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/block.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/format.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/repair.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/c.cc --compile=./vendor/db/log_writer.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/options.cc --compile=./vendor/util/comparator.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/status.cc --pnim --preprocess --noHeader --includeDirs=./vendor --includeDirs=./vendor/helpers --includeDirs=./vendor/helpers/memenv --includeDirs=./vendor/port --includeDirs=./vendor/include --includeDirs=./build/include ./vendor/include/leveldb/c.h
+#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/helpers/memenv/memenv.cc --compile=./vendor/table/table.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/block.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/format.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/repair.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/c.cc --compile=./vendor/db/log_writer.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/options.cc --compile=./vendor/util/comparator.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/status.cc --pnim --preprocess --noHeader ./vendor/include/leveldb/c.h
 
 {.push hint[ConvFromXtoItselfNotNeeded]: off.}
 import macros
@@ -62,12 +70,6 @@ macro defineEnum(typ: untyped): untyped =
 
 
 {.experimental: "codeReordering".}
-{.passC: "-I./vendor".}
-{.passC: "-I./vendor/helpers".}
-{.passC: "-I./vendor/helpers/memenv".}
-{.passC: "-I./vendor/port".}
-{.passC: "-I./vendor/include".}
-{.passC: "-I./build/include".}
 {.compile: "./vendor/helpers/memenv/memenv.cc".}
 {.compile: "./vendor/table/table.cc".}
 {.compile: "./vendor/table/iterator.cc".}

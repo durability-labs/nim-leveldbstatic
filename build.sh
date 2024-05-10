@@ -42,14 +42,5 @@ toast \
   --pnim \
   --preprocess \
   --noHeader \
-  --includeDirs="${sourceDir}" \
-  --includeDirs="${sourceDir}/helpers" \
-  --includeDirs="${sourceDir}/helpers/memenv" \
-  --includeDirs="${sourceDir}/port" \
-  --includeDirs="${sourceDir}/include" \
-  --includeDirs="${buildDir}/include" \
   "${sourceDir}/include/leveldb/c.h" >> "${output}"
-
-#  --includeDirs="${buildDir}/include/port" \
-
 
