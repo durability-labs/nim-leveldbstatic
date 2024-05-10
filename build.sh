@@ -21,7 +21,7 @@ rm -Rf "${sourceDir}/benchmarks"
 rm "${sourceDir}/util/testutil.cc"
 
 # Prelude:
-cat "${root}/prelude.nim" > "${output}"
+cat "${root}/leveldb/prelude.nim" > "${output}"
 echo >> "${output}"
 
 # assemble files to be compiled:
