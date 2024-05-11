@@ -30,9 +30,4 @@
 #define HAVE_SNAPPY 0
 #endif  // !defined(HAVE_SNAPPY)
 
-// Define to 1 if you have Zstd.
-#if !defined(HAVE_Zstd)
-#define HAVE_ZSTD 0
-#endif  // !defined(HAVE_ZSTD)
-
 #endif  // STORAGE_LEVELDB_PORT_PORT_CONFIG_H_
