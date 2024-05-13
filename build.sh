@@ -3,7 +3,7 @@ root=$(dirname "$0")
 
 sourceDir="${root}/vendor"
 buildDir="${root}/build"
-output="${root}/leveldb/raw.nim"
+output="${root}/leveldbstatic/raw.nim"
 
 # install nimterop, if not already installed
 if ! [ -x "$(command -v toast)" ]; then
@@ -50,17 +50,7 @@ toast \
   --includeDirs="${buildDir}/include" \
   "${sourceDir}/include/leveldb/c.h" >> "${output}"
 
-#  {.compile: "./vendor
-#  {.compile: root & "/vendor
-
-#  {.passC: "-I./vendor".}
-#  {.passC: "-I./build/include".}
-#  {.passC: "-I" & root/"vendor
-
-
-
 sed -i 's/\bpassC\b/passc/g' "${output}"
-
 sed -i 's/{\.compile\:\ \"\./{\.compile\:\ root\ \&\ \"/g' "${output}"
 sed -i 's/{\.passc\:\ \"-I\./{\.passc\:\ \"-I\"\ \&\ root\ \&\ \"/g' "${output}"
 

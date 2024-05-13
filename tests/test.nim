@@ -1,5 +1,6 @@
 import unittest, options, os, osproc, sequtils, strutils
-import leveldb, leveldb/raw
+import leveldbstatic as leveldb
+import leveldbstatic/raw
 
 const
   tmpDir = getTempDir() / "testleveldb"
@@ -212,7 +213,7 @@ suite "package":
   test "import as package":
     let (output, exitCode) = execNimble("install")
     check exitCode == QuitSuccess
-    check output.contains("leveldb installed successfully.")
+    check output.contains("leveldbstatic installed successfully.")
 
     cd "tests"/"packagetest":
       var (output, exitCode) = execNimble("build")

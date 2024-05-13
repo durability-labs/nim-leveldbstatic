@@ -1,6 +1,6 @@
 import os
 import options
-import leveldb
+import leveldbstatic as leveldb
 
 when isMainModule:
   let tempDir = getTempDir() / "testleveldb" / "tooldb"

@@ -1,5 +1,5 @@
 import options, os, strutils
-import leveldb
+import leveldbstatic as leveldb
 
 proc tool() =
   proc usage() =

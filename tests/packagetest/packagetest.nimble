@@ -12,4 +12,4 @@ bin           = @["packagetest"]
 # Dependencies
 
 requires "nim >= 0.18.0"
-requires "leveldb"
+requires "leveldbstatic"
