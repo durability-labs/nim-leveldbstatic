@@ -1,10 +1,14 @@
+import os
 import options
-import leveldb
+import leveldbstatic as leveldb
 
 when isMainModule:
-  let db = leveldb.open("/tmp/testleveldb/tooldb")
+  let tempDir = getTempDir() / "testleveldb" / "tooldb"
+  createdir(tempDir)
+  let db = leveldb.open(tempDir)
   db.put("hello", "world")
   let val = db.get("hello")
   if val.isSome() and val.get() == "world":
     echo "leveldb works."
   db.close()
+  removedir(tempDir)

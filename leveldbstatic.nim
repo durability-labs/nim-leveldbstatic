@@ -9,7 +9,7 @@
 ## Create a database:
 ##
 ## .. code-block:: Nim
-##    import leveldb
+##    import leveldbstatic
 ##    import options
 ##
 ##    var db = leveldb.open("/tmp/mydata")
@@ -52,7 +52,7 @@
 ##    db.close()
 
 import options, os, strutils
-import leveldb/raw
+import leveldbstatic/raw
 
 type
   LevelDb* = ref object
@@ -78,7 +78,7 @@ type
 
 const
   version* = block:
-    const configFile = "leveldb.nimble"
+    const configFile = "leveldbstatic.nimble"
     const sourcePath = currentSourcePath()
     const parentConfig = sourcePath.parentDir.parentDir / configFile
     const localConfig = sourcePath.parentDir / configFile

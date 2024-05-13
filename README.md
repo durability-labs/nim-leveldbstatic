@@ -1,12 +1,14 @@
 # leveldb.nim
 
-[![docs](https://img.shields.io/badge/docs-leveldb.nim-green)](https://zielmicha.github.io/leveldb.nim/)
+A self-contained LevelDB wrapper for Nim in a Nim friendly way. Uses git-submodule and nimterop so that no external libraries have to be installed or linked.
 
-A LevelDB wrapper for Nim in a Nim friendly way.
+Original nim LevelDB wrapper: [HERE](https://github.com/zielmicha/leveldb.nim)
+
+Replacing of system library dependency with self-contained C/CPP interoperability by (Codex.Storage)[https://codex.storage]
 
 Create a database:
 ```Nim
-   import leveldb
+   import leveldbstatic
    import options
 
    var db = leveldb.open("/tmp/mydata")
