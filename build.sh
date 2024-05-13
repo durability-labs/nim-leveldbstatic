@@ -42,5 +42,25 @@ toast \
   --pnim \
   --preprocess \
   --noHeader \
+  --includeDirs="${sourceDir}" \
+  --includeDirs="${sourceDir}/helpers" \
+  --includeDirs="${sourceDir}/helpers/memenv" \
+  --includeDirs="${sourceDir}/port" \
+  --includeDirs="${sourceDir}/include" \
+  --includeDirs="${buildDir}/include" \
   "${sourceDir}/include/leveldb/c.h" >> "${output}"
+
+#  {.compile: "./vendor
+#  {.compile: root & "/vendor
+
+#  {.passC: "-I./vendor".}
+#  {.passC: "-I./build/include".}
+#  {.passC: "-I" & root/"vendor
+
+
+
+sed -i 's/\bpassC\b/passc/g' "${output}"
+
+sed -i 's/{\.compile\:\ \"\./{\.compile\:\ root\ \&\ \"/g' "${output}"
+sed -i 's/{\.passc\:\ \"-I\./{\.passc\:\ \"-I\"\ \&\ root\ \&\ \"/g' "${output}"
 
