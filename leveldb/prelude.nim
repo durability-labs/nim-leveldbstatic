@@ -14,3 +14,12 @@ when defined(posix):
   {.compile: envPosix.}
   {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
+
+{.passc: "-DHAVE_FDATASYNC=0".}
+{.passc: "-DHAVE_FULLFSYNC=0".}
+{.passc: "-DHAVE_O_CLOEXEC=0".}
+{.passc: "-DHAVE_CRC32C=0".}
+{.passc: "-DHAVE_SNAPPY=0".}
+{.passc: "-DHAVE_ZSTD=0".}
+{.passc: "-DHAVE_Zstd=0".}
+
