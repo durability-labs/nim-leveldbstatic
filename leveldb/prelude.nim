@@ -6,10 +6,11 @@ const envPosix = root/"vendor"/"util"/"env_posix.cc"
 
 when defined(windows):
   {.compile: envWindows.}
-  {.passc: "-DLEVELDB_PLATFORM_POSIX".}
+  {.passc: "-DLEVELDB_PLATFORM_WINDOWS".}
+  {.passc: "-D_UNICODE".}
+  {.passc: "-DUNICODE".}
 
 when defined(posix):
   {.compile: envPosix.}
-  {.passc: "-DLEVELDB_PLATFORM_WINDOWS".}
-
+  {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
