@@ -205,6 +205,77 @@ suite "leveldb":
     nc.put("a", "1")
     check(toSeq(nc.iter()) == @[("a", "1")])
 
+suite "leveldb queryIter":
+
+  setup:
+    let env = leveldb_create_default_env()
+    let dbName = $(leveldb_env_get_test_directory(env))
+    let db = leveldb.open(dbName)
+    let
+      k1 = "k1"
+      k2 = "k2"
+      k3 = "l3"
+      v1 = "v1"
+      v2 = "v2"
+      v3 = "v3"
+      empty = ("", "")
+
+    db.put(k1, v1)
+    db.put(k2, v2)
+    db.put(k3, v3)
+
+  teardown:
+    db.close()
+    removeDb(dbName)
+
+  test "iterates all keys and values":
+    let iter = db.queryIter()
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == (k3, v3)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+    
+  test "iterates only keys":
+    let iter = db.queryIter(keysOnly = true)
+    check:
+      not iter.finished
+      iter.next() == (k1, "")
+      not iter.finished
+      iter.next() == (k2, "")
+      not iter.finished
+      iter.next() == (k3, "")
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+  test "iterates only 'k', both keys and values":
+    let iter = db.queryIter(prefix = "k")
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+  test "iterates only 'k', only keys":
+    let iter = db.queryIter(prefix = "k", keysOnly = true)
+    check:
+      not iter.finished
+      iter.next() == (k1, "")
+      not iter.finished
+      iter.next() == (k2, "")
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
 suite "package":
 
   setup:

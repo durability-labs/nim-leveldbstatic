@@ -76,6 +76,11 @@ type
 
   LevelDbException* = object of CatchableError
 
+  IterNext* = proc(): (string, string) {.gcsafe, closure.}
+  LevelDbQueryIter* = ref object
+    finished*: bool
+    next*: IterNext
+
 const
   version* = block:
     const configFile = "leveldbstatic.nimble"
@@ -405,6 +410,65 @@ iterator iterRange*(self: LevelDb, start, limit: string): (string, string) =
       if key > limit:
         break
     yield (key, value)
+
+
+proc getIterKey(iterPtr: ptr leveldb_iterator_t): string =
+  var len: csize_t
+  var str: cstring
+
+  str = leveldb_iter_key(iterPtr, addr len)
+  return newString(str, len)
+
+proc getIterValue(iterPtr: ptr leveldb_iterator_t): string =
+  var len: csize_t
+  var str: cstring
+
+  str = leveldb_iter_value(iterPtr, addr len)
+  return newString(str, len)
+
+proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false): LevelDbQueryIter = 
+  var iterPtr = leveldb_create_iterator(self.db, self.readOptions)
+
+  if prefix.len > 0:
+    leveldb_iter_seek(iterPtr, prefix, prefix.len.csize_t)
+  else:
+    leveldb_iter_seek_to_first(iterPtr)
+
+  var iter = LevelDbQueryIter()
+  let emptyResponse = ("", "")
+
+  proc getNext(): (string, string) {.gcsafe, closure.} =
+    if iter.finished:
+      return emptyResponse
+    
+    if leveldb_iter_valid(iterPtr) == levelDbFalse:
+      iter.finished = true
+      leveldb_iter_destroy(iterPtr)
+      return emptyResponse
+
+    let
+      keyStr = getIterKey(iterPtr)
+      valueStr = if keysOnly: "" else: getIterValue(iterPtr)
+
+    var err: cstring = nil
+    leveldb_iter_get_error(iterPtr, addr err)
+    checkError(err)
+
+    leveldb_iter_next(iterPtr)
+
+    if prefix.len > 0:
+      if keyStr.startsWith(prefix):
+        return (keyStr, valueStr)
+      else:
+        iter.finished = true
+        leveldb_iter_destroy(iterPtr)
+        return emptyResponse
+    else:
+      return (keyStr, valueStr)
+  
+  iter.finished = false
+  iter.next = getNext
+  return iter
 
 proc removeDb*(name: string) =
   ## Remove the database `name`.
