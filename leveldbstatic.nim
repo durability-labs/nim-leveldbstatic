@@ -426,25 +426,37 @@ proc getIterValue(iterPtr: ptr leveldb_iterator_t): string =
   str = leveldb_iter_value(iterPtr, addr len)
   return newString(str, len)
 
-proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false): LevelDbQueryIter = 
-  var iterPtr = leveldb_create_iterator(self.db, self.readOptions)
-
+proc seekToQueryStart(iterPtr: ptr leveldb_iterator_t, prefix: string, skip: int) =
   if prefix.len > 0:
     leveldb_iter_seek(iterPtr, prefix, prefix.len.csize_t)
   else:
     leveldb_iter_seek_to_first(iterPtr)
+  for i in 0..<skip:
+    leveldb_iter_next(iterPtr)
 
-  var iter = LevelDbQueryIter()
+proc closeIter(iter: LevelDbQueryIter, iterPtr: ptr leveldb_iterator_t) =
+  iter.finished = true
+  leveldb_iter_destroy(iterPtr)
+  
+proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false, skip: int = 0, limit: int = 0): LevelDbQueryIter = 
+  var iterPtr = leveldb_create_iterator(self.db, self.readOptions)
+
+  seekToQueryStart(iterPtr, prefix, skip)
+
+  var
+    iter = LevelDbQueryIter()
+    remaining = limit
   let emptyResponse = ("", "")
 
   proc getNext(): (string, string) {.gcsafe, closure.} =
     if iter.finished:
       return emptyResponse
     
-    if leveldb_iter_valid(iterPtr) == levelDbFalse:
-      iter.finished = true
-      leveldb_iter_destroy(iterPtr)
+    if leveldb_iter_valid(iterPtr) == levelDbFalse or (limit > 0 and remaining == 0):
+      iter.closeIter(iterPtr)
       return emptyResponse
+    if limit > 0:
+      dec remaining
 
     let
       keyStr = getIterKey(iterPtr)
@@ -460,8 +472,7 @@ proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false): Lev
       if keyStr.startsWith(prefix):
         return (keyStr, valueStr)
       else:
-        iter.finished = true
-        leveldb_iter_destroy(iterPtr)
+        iter.closeIter(iterPtr)
         return emptyResponse
     else:
       return (keyStr, valueStr)

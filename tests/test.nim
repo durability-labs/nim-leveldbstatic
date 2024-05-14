@@ -241,6 +241,28 @@ suite "leveldb queryIter":
       iter.next() == empty
       iter.finished
     
+  test "skip":
+    let iter = db.queryIter(skip = 1)
+    check:
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == (k3, v3)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+  test "limit":
+    let iter = db.queryIter(limit = 2)
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
   test "iterates only keys":
     let iter = db.queryIter(keysOnly = true)
     check:
@@ -261,6 +283,24 @@ suite "leveldb queryIter":
       iter.next() == (k1, v1)
       not iter.finished
       iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+  test "iterates only 'k', skip":
+    let iter = db.queryIter(prefix = "k", skip = 1)
+    check:
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+  test "iterate only 'k', limit":
+    let iter = db.queryIter(prefix = "k", limit = 1)
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
       not iter.finished
       iter.next() == empty
       iter.finished
