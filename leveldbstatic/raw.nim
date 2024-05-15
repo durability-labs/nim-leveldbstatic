@@ -3,6 +3,7 @@ import os
 const root = currentSourcePath.parentDir.parentDir
 const envWindows = root/"vendor"/"util"/"env_windows.cc"
 const envPosix = root/"vendor"/"util"/"env_posix.cc"
+const checkers = root/"checkers"
 
 when defined(windows):
   {.compile: envWindows.}
@@ -15,16 +16,25 @@ when defined(posix):
   {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
 
-{.passc: "-DHAVE_FDATASYNC=0".}
-{.passc: "-DHAVE_FULLFSYNC=0".}
-{.passc: "-DHAVE_O_CLOEXEC=0".}
-{.passc: "-DHAVE_CRC32C=0".}
-{.passc: "-DHAVE_SNAPPY=0".}
-{.passc: "-DHAVE_ZSTD=0".}
-{.passc: "-DHAVE_Zstd=0".}
+static:
+  proc doesCompile(cfile: string): int =
+    let rv = gorgeEx("gcc " & cfile)
+    if rv[1] == 0:
+      echo "YES: " & cfile
+      return 1
+    echo "NO: " & cfile
+    return 0
+
+  {.passc: "-DHAVE_FDATASYNC=" & $doesCompile(checkers/"check_fdatasync.c").}
+  {.passc: "-DHAVE_FULLFSYNC=" & $doesCompile(checkers/"check_fullfsync.c").}
+  {.passc: "-DHAVE_O_CLOEXEC=" & $doesCompile(checkers/"check_ocloexec.c").}
+  {.passc: "-DHAVE_CRC32C=" & $doesCompile(checkers/"check_crc32c.c").}
+  {.passc: "-DHAVE_SNAPPY=" & $doesCompile(checkers/"check_snappy.c").}
+  {.passc: "-DHAVE_ZSTD=" & $doesCompile(checkers/"check_zstd.c").}
+  {.passc: "-DHAVE_Zstd=" & $doesCompile(checkers/"check_zstd.c").}
 
 
-# Generated @ 2024-05-13T12:00:58+02:00
+# Generated @ 2024-05-15T12:43:11+02:00
 # Command line:
 #   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/db/log_writer.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/c.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/repair.cc --compile=./vendor/table/block.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/format.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/table.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/options.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/status.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/comparator.cc --compile=./vendor/helpers/memenv/memenv.cc --pnim --preprocess --noHeader --includeDirs=./vendor --includeDirs=./vendor/helpers --includeDirs=./vendor/helpers/memenv --includeDirs=./vendor/port --includeDirs=./vendor/include --includeDirs=./build/include ./vendor/include/leveldb/c.h
 
