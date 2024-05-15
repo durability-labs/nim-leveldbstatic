@@ -20,9 +20,7 @@ static:
   proc doesCompile(cfile: string): int =
     let rv = gorgeEx("gcc " & cfile)
     if rv[1] == 0:
-      echo "YES: " & cfile
       return 1
-    echo "NO: " & cfile
     return 0
 
   {.passc: "-DHAVE_FDATASYNC=" & $doesCompile(checkers/"check_fdatasync.c").}
