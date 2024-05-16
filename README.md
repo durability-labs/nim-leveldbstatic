@@ -6,6 +6,8 @@ Original nim LevelDB wrapper: [HERE](https://github.com/zielmicha/leveldb.nim)
 
 Replacing of system library dependency with self-contained C/CPP interoperability by (Codex.Storage)[https://codex.storage]
 
+## Usage
+
 Create a database:
 ```Nim
    import leveldbstatic
@@ -49,3 +51,13 @@ Iterate over subset of database content:
 
    db.close()
 ```
+
+## Compiling with optimizations
+
+This library can be compiled with the following optimization options. By default these are disabled. Provide the following nim compiler flags to enable them:
+ - fdatasync from <unistd.h> `--passC:-DHAVE_FDATASYNC=1`
+ - F_FULLSYNC from <fcntl.h> `--passC:-DHAVE_FULLFSYNC=1`
+ - O_CLOEXEC from <fcntl.h> `--passC:-DHAVE_O_CLOEXEC=1`
+ - crc32c from <crc32c/crc32c.h> `--passC:-DHAVE_CRC32C=1`
+ - snappy from <snappy.h> `--passC:-DHAVE_SNAPPY=1`
+ - zstd from <zstd.h> `--passC:-DHAVE_ZSTD=1`

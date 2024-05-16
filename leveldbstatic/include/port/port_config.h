@@ -7,7 +7,7 @@
 
 // Define to 1 if you have a definition for fdatasync() in <unistd.h>.
 #if !defined(HAVE_FDATASYNC)
-#define HAVE_FDATASYNC 1
+#define HAVE_FDATASYNC 0
 #endif  // !defined(HAVE_FDATASYNC)
 
 // Define to 1 if you have a definition for F_FULLFSYNC in <fcntl.h>.
@@ -17,7 +17,7 @@
 
 // Define to 1 if you have a definition for O_CLOEXEC in <fcntl.h>.
 #if !defined(HAVE_O_CLOEXEC)
-#define HAVE_O_CLOEXEC 1
+#define HAVE_O_CLOEXEC 0
 #endif  // !defined(HAVE_O_CLOEXEC)
 
 // Define to 1 if you have Google CRC32C.
@@ -31,7 +31,7 @@
 #endif  // !defined(HAVE_SNAPPY)
 
 // Define to 1 if you have Zstd.
-#if !defined(HAVE_Zstd)
+#if !defined(HAVE_ZSTD)
 #define HAVE_ZSTD 0
 #endif  // !defined(HAVE_ZSTD)
 
