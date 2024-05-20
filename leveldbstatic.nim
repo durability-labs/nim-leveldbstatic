@@ -77,9 +77,11 @@ type
   LevelDbException* = object of CatchableError
 
   IterNext* = proc(): (string, string) {.gcsafe, closure.}
+  IterDispose* = proc() {.gcsafe, closure.}
   LevelDbQueryIter* = ref object
     finished*: bool
     next*: IterNext
+    dispose*: IterDispose
 
 const
   version* = block:
@@ -477,8 +479,13 @@ proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false, skip
     else:
       return (keyStr, valueStr)
   
+  proc dispose() {.gcsafe, closure.} =
+    if not iter.finished:
+      iter.closeIter(iterPtr)
+
   iter.finished = false
   iter.next = getNext
+  iter.dispose = dispose
   return iter
 
 proc removeDb*(name: string) =
