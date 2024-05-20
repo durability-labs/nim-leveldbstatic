@@ -241,6 +241,22 @@ suite "leveldb queryIter":
       iter.next() == empty
       iter.finished
     
+  test "iterate until disposed":
+    let iter = db.queryIter()
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
+      not iter.finished
+      iter.next() == (k2, v2)
+      not iter.finished
+    
+    iter.dispose()
+
+    check:
+      iter.finished
+      iter.next() == empty
+      iter.finished
+
   test "skip":
     let iter = db.queryIter(skip = 1)
     check:
