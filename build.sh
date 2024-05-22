@@ -47,10 +47,8 @@ toast \
   --includeDirs="${sourceDir}/helpers/memenv" \
   --includeDirs="${sourceDir}/port" \
   --includeDirs="${sourceDir}/include" \
-  --includeDirs="${buildDir}/include" \
   "${sourceDir}/include/leveldb/c.h" >> "${output}"
 
 sed -i 's/\bpassC\b/passc/g' "${output}"
 sed -i 's/{\.compile\:\ \"\./{\.compile\:\ root\ \&\ \"/g' "${output}"
 sed -i 's/{\.passc\:\ \"-I\./{\.passc\:\ \"-I\"\ \&\ root\ \&\ \"/g' "${output}"
-

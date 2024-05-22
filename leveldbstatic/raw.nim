@@ -1,8 +1,37 @@
 import os
 
-const root = currentSourcePath.parentDir.parentDir
-const envWindows = root/"vendor"/"util"/"env_windows.cc"
-const envPosix = root/"vendor"/"util"/"env_posix.cc"
+const
+  root = currentSourcePath.parentDir.parentDir
+  envWindows = root/"vendor"/"util"/"env_windows.cc"
+  envPosix = root/"vendor"/"util"/"env_posix.cc"
+
+  LevelDbCMakeFlags {.strdefine.} =
+    when defined(macosx):
+      "-DCMAKE_BUILD_TYPE=Release"
+    elif defined(windows):
+      "-G\"MSYS Makefiles\" -DCMAKE_BUILD_TYPE=Release"
+    else:
+      "-DCMAKE_BUILD_TYPE=Release"
+  
+  LevelDbDir {.strdefine.} = $(root/"vendor")
+  buildDir = $(root/"build")
+
+static:
+  echo "Initializing submodule..."
+  discard gorge "git submodule deinit -f \"" & root & "\""
+  discard gorge "git submodule update --init --recursive --checkout \"" & root & "\""
+
+  echo "\nClean dir: \"" & buildDir & "\""
+  discard gorge "rm -rf " & buildDir
+  discard gorge "mkdir -p " & buildDir
+
+  let cmd = "cmake -S \"" & LevelDbDir & "\" -B \"" & buildDir & "\" " & LevelDbCmakeFlags
+  echo "\nBuilding LevelDB: " & cmd
+  let (output, exitCode) = gorgeEx cmd
+  if exitCode != 0:
+    discard gorge "rm -rf " & buildDir
+    echo output
+    raise (ref Defect)(msg: "Failed to build LevelDB")
 
 when defined(windows):
   {.compile: envWindows.}
@@ -14,19 +43,9 @@ when defined(posix):
   {.compile: envPosix.}
   {.passc: "-DLEVELDB_PLATFORM_POSIX".}
 
-
-{.passc: "-DHAVE_FDATASYNC=0".}
-{.passc: "-DHAVE_FULLFSYNC=0".}
-{.passc: "-DHAVE_O_CLOEXEC=0".}
-{.passc: "-DHAVE_CRC32C=0".}
-{.passc: "-DHAVE_SNAPPY=0".}
-{.passc: "-DHAVE_ZSTD=0".}
-{.passc: "-DHAVE_Zstd=0".}
-
-
-# Generated @ 2024-05-13T12:00:58+02:00
+# Generated @ 2024-05-22T10:00:37+02:00
 # Command line:
-#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/db/log_writer.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/c.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/repair.cc --compile=./vendor/table/block.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/format.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/table.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/options.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/status.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/comparator.cc --compile=./vendor/helpers/memenv/memenv.cc --pnim --preprocess --noHeader --includeDirs=./vendor --includeDirs=./vendor/helpers --includeDirs=./vendor/helpers/memenv --includeDirs=./vendor/port --includeDirs=./vendor/include --includeDirs=./build/include ./vendor/include/leveldb/c.h
+#   /home/ben/.nimble/pkgs/nimterop-0.6.13/nimterop/toast --compile=./vendor/db/log_writer.cc --compile=./vendor/db/db_impl.cc --compile=./vendor/db/db_iter.cc --compile=./vendor/db/dumpfile.cc --compile=./vendor/db/c.cc --compile=./vendor/db/builder.cc --compile=./vendor/db/filename.cc --compile=./vendor/db/write_batch.cc --compile=./vendor/db/table_cache.cc --compile=./vendor/db/version_edit.cc --compile=./vendor/db/dbformat.cc --compile=./vendor/db/log_reader.cc --compile=./vendor/db/memtable.cc --compile=./vendor/db/version_set.cc --compile=./vendor/db/repair.cc --compile=./vendor/table/block.cc --compile=./vendor/table/two_level_iterator.cc --compile=./vendor/table/table_builder.cc --compile=./vendor/table/iterator.cc --compile=./vendor/table/block_builder.cc --compile=./vendor/table/merger.cc --compile=./vendor/table/format.cc --compile=./vendor/table/filter_block.cc --compile=./vendor/table/table.cc --compile=./vendor/util/hash.cc --compile=./vendor/util/arena.cc --compile=./vendor/util/options.cc --compile=./vendor/util/histogram.cc --compile=./vendor/util/crc32c.cc --compile=./vendor/util/env.cc --compile=./vendor/util/filter_policy.cc --compile=./vendor/util/bloom.cc --compile=./vendor/util/logging.cc --compile=./vendor/util/coding.cc --compile=./vendor/util/status.cc --compile=./vendor/util/cache.cc --compile=./vendor/util/comparator.cc --compile=./vendor/helpers/memenv/memenv.cc --pnim --preprocess --noHeader --includeDirs=./vendor --includeDirs=./vendor/helpers --includeDirs=./vendor/helpers/memenv --includeDirs=./vendor/port --includeDirs=./vendor/include ./vendor/include/leveldb/c.h
 
 {.push hint[ConvFromXtoItselfNotNeeded]: off.}
 import macros
@@ -79,7 +98,6 @@ macro defineEnum(typ: untyped): untyped =
 {.passc: "-I" & root & "/vendor/helpers/memenv".}
 {.passc: "-I" & root & "/vendor/port".}
 {.passc: "-I" & root & "/vendor/include".}
-{.passc: "-I" & root & "/build/include".}
 {.compile: root & "/vendor/db/log_writer.cc".}
 {.compile: root & "/vendor/db/db_impl.cc".}
 {.compile: root & "/vendor/db/db_iter.cc".}
