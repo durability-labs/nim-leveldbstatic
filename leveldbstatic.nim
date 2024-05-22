@@ -76,8 +76,8 @@ type
 
   LevelDbException* = object of CatchableError
 
-  IterNext* = proc(): (string, string) {.gcsafe, closure.}
-  IterDispose* = proc() {.gcsafe, closure.}
+  IterNext* = proc(): (string, string) {.gcsafe, closure, raises: [LevelDbException].}
+  IterDispose* = proc() {.gcsafe, closure, raises: [].}
   LevelDbQueryIter* = ref object
     finished*: bool
     next*: IterNext
