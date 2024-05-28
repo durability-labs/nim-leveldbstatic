@@ -44,7 +44,6 @@ proc execTool(args: varargs[string]): tuple[output: string, exitCode: int] =
   checkpoint(result.output)
 
 suite "leveldb":
-
   setup:
     let env = leveldb_create_default_env()
     let dbName = $(leveldb_env_get_test_directory(env))
@@ -206,7 +205,6 @@ suite "leveldb":
     check(toSeq(nc.iter()) == @[("a", "1")])
 
 suite "leveldb queryIter":
-
   setup:
     let env = leveldb_create_default_env()
     let dbName = $(leveldb_env_get_test_directory(env))
@@ -332,8 +330,125 @@ suite "leveldb queryIter":
       iter.next() == empty
       iter.finished
 
-suite "package":
+  test "concurrent iterators - 1":
+    let
+      iter1 = db.queryIter()
+      iter2 = db.queryIter()
 
+    check:
+      # 1, then 2
+      not iter1.finished
+      iter1.next() == (k1, v1)
+
+      not iter2.finished
+      iter2.next() == (k1, v1)
+
+      # 1, 1, then 2, 2
+      not iter1.finished
+      iter1.next() == (k2, v2)
+      not iter1.finished
+      iter1.next() == (k3, v3)
+
+      not iter2.finished
+      iter2.next() == (k2, v2)
+      not iter2.finished
+      iter2.next() == (k3, v3)
+
+      # finish 1, then finish 2
+      not iter1.finished
+      iter1.next() == empty
+
+      not iter2.finished
+      iter2.next() == empty
+
+      iter1.finished
+      iter2.finished
+
+  test "concurrent iterators - 2":
+    let
+      iter1 = db.queryIter()
+      iter2 = db.queryIter()
+
+    check:
+      # 1, then 2
+      not iter1.finished
+      iter1.next() == (k1, v1)
+
+      not iter2.finished
+      iter2.next() == (k1, v1)
+
+      # finish 1
+      not iter1.finished
+      iter1.next() == (k2, v2)
+      not iter1.finished
+      iter1.next() == (k3, v3)
+      not iter1.finished
+      iter1.next() == empty
+      iter1.finished
+
+      # finish 2
+      not iter2.finished
+      iter2.next() == (k2, v2)
+      not iter2.finished
+      iter2.next() == (k3, v3)
+      not iter2.finished
+      iter2.next() == empty
+      iter2.finished
+
+  test "concurrent iterators - dispose":
+    let
+      iter1 = db.queryIter()
+      iter2 = db.queryIter()
+
+    check:
+      # 1, then 2
+      not iter1.finished
+      iter1.next() == (k1, v1)
+
+      not iter2.finished
+      iter2.next() == (k1, v1)
+
+    # dispose 1
+    iter1.dispose()
+
+    check:
+      iter1.finished
+      iter1.next() == empty
+      iter1.finished
+
+      # finish 2
+      not iter2.finished
+      iter2.next() == (k2, v2)
+      not iter2.finished
+      iter2.next() == (k3, v3)
+      not iter2.finished
+      iter2.next() == empty
+      iter2.finished
+
+  test "modify while iterating":
+    let
+      iter = db.queryIter()
+
+    check:
+      not iter.finished
+      iter.next() == (k1, v1)
+      not iter.finished
+      iter.next() == (k2, v2)
+
+    # insert
+    let
+      k4 = "k4"
+      v4 = "v4"
+    db.put(k4, v4)
+
+    check:
+      not iter.finished
+      iter.next() == (k3, v3)
+      not iter.finished
+      iter.next() == empty
+      iter.finished
+
+suite "package":
   setup:
     removeDir(tmpDir)
 
@@ -353,7 +468,6 @@ suite "package":
       check output.contains("leveldb works.")
 
 suite "tool":
-
   setup:
     removeDir(tmpDir)
 
