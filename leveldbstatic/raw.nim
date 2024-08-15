@@ -16,7 +16,11 @@ const
   LevelDbDir {.strdefine.} = $(root/"vendor")
   buildDir = $(root/"build")
 
-static:
+proc buildLevelDb() =
+  if fileExists(buildDir/"Makefile"):
+    echo "LevelDB already build. Delete '" & buildDir & "' to force rebuild."
+    return
+
   echo "Initializing submodule..."
   discard gorge "git submodule deinit -f \"" & root & "\""
   discard gorge "git submodule update --init --recursive --checkout \"" & root & "\""
@@ -32,6 +36,9 @@ static:
     discard gorge "rm -rf " & buildDir
     echo output
     raise (ref Defect)(msg: "Failed to build LevelDB")
+
+static:
+  buildLevelDb()
 
 when defined(windows):
   {.compile: envWindows.}
