@@ -7,13 +7,34 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-        nim: [stable, 1.6.18, 2.0.12]
+        include:
+          - os: ubuntu-latest
+            nim: 1.6.18
+          - os: ubuntu-latest
+            nim: 2.0.12
+          - os: ubuntu-latest
+            nim: 2.2.4
+          - os: macos-latest
+            nim: 1.6.18
+          - os: macos-latest
+            nim: 2.0.12
+          - os: macos-latest
+            nim: 2.2.4
+          - os: windows-latest
+            nim: binary:1.6.18
+          - os: windows-latest
+            nim: binary:2.0.12
+          - os: windows-latest
+            nim: binary:2.2.4
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - uses: iffy/install-nim@v4
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.x'
+    - uses: iffy/install-nim@v5
       with:
         version: ${{ matrix.nim }}
     - name: Build
