@@ -10,3 +10,5 @@ leveldbtool
 build
 nimbledeps
 *.exe
+nimble.develop
+nimble.paths
