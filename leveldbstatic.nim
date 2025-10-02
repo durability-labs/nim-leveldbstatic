@@ -76,12 +76,13 @@ type
 
   LevelDbException* = object of CatchableError
 
-  IterNext* = proc(): (string, string) {.gcsafe, closure, raises: [LevelDbException].}
-  IterDispose* = proc() {.gcsafe, closure, raises: [].}
-  LevelDbQueryIter* = ref object
-    finished*: bool
-    next*: IterNext
-    dispose*: IterDispose
+  IterNext* = proc(iter: var LevelDbQueryIterObj): (string, string) {.gcsafe, closure, raises: [LevelDbException].}
+  IterDispose* = proc(iter: var LevelDbQueryIterObj) {.gcsafe, closure, raises: [].}
+  LevelDbQueryIterObj = object
+    finished: bool
+    next: IterNext
+    dispose: IterDispose
+  LevelDbQueryIter* = ref LevelDbQueryIterObj
 
 const
   version* = block:
@@ -436,7 +437,16 @@ proc seekToQueryStart(iterPtr: ptr leveldb_iterator_t, prefix: string, skip: int
   for i in 0..<skip:
     leveldb_iter_next(iterPtr)
 
-proc closeIter(iter: LevelDbQueryIter, iterPtr: ptr leveldb_iterator_t) =
+proc finished*(iter: LevelDbQueryIter): bool =
+  iter.finished
+
+proc next*(iter: LevelDbQueryIter): (string, string) =
+  iter.next(iter[])
+
+proc dispose*(iter: LevelDbQueryIter) =
+  iter.dispose(iter[])
+
+proc closeIter(iter: var LevelDbQueryIterObj, iterPtr: ptr leveldb_iterator_t) =
   iter.finished = true
   leveldb_iter_destroy(iterPtr)
   
@@ -445,12 +455,10 @@ proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false, skip
 
   seekToQueryStart(iterPtr, prefix, skip)
 
-  var
-    iter = LevelDbQueryIter()
-    remaining = limit
+  var remaining = limit
   let emptyResponse = ("", "")
 
-  proc getNext(): (string, string) {.gcsafe, closure.} =
+  proc getNext(iter: var LevelDbQueryIterObj): (string, string) {.gcsafe, closure.} =
     if iter.finished:
       return emptyResponse
     
@@ -479,14 +487,11 @@ proc queryIter*(self: LevelDb, prefix: string = "", keysOnly: bool = false, skip
     else:
       return (keyStr, valueStr)
   
-  proc dispose() {.gcsafe, closure.} =
+  proc dispose(iter: var LevelDbQueryIterObj) {.gcsafe, closure.} =
     if not iter.finished:
       iter.closeIter(iterPtr)
 
-  iter.finished = false
-  iter.next = getNext
-  iter.dispose = dispose
-  return iter
+  return LevelDbQueryIter(next: getNext, dispose: dispose)
 
 proc removeDb*(name: string) =
   ## Remove the database `name`.
